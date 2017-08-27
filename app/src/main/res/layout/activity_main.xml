@@ -22,11 +22,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Toolbar Title"
-        android:layout_gravity="center"
-        android:id="@+id/toolbar_title" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Toolbar Title"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:id="@+id/toolbar_title" />-->
+
     </android.support.v7.widget.Toolbar>
 </android.support.constraint.ConstraintLayout>
