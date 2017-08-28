@@ -16,48 +16,26 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // firebase part
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-
-                    //start login activity
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-                // ...
-            }
-        };
         Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getBoolean("isfirstrun", true);
 
         //check if first run
-        if(false) { //TODO change to isFirstRun
-            Toast.makeText(MainActivity.this, "First Run", Toast.LENGTH_LONG).show();
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                    .putBoolean("isfirstrun", false).apply();
-
-            //start login activity
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-
-        }
+//        if(false) { //TODO change to isFirstRun
+//            Toast.makeText(MainActivity.this, "First Run", Toast.LENGTH_LONG).show();
+//            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                    .putBoolean("isfirstrun", false).apply();
+//
+//            //start login activity
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//
+//        }
         setContentView(R.layout.activity_main);
         // adding action bar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -67,19 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
