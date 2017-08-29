@@ -1,12 +1,16 @@
 package com.example.android.plants;
 
 import android.content.Context;
+import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -47,12 +51,17 @@ public class CustomGridViewActivity extends BaseAdapter {
 
         if (convertView == null) {
 
+            TextView textViewAndroid;
+            ImageView imageViewAndroid;
+
             //TODO maybe remove first line
             gridViewAndroid = new View(mContext);
             gridViewAndroid = inflater.inflate(R.layout.gridview_layout, null);
 
-            TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
-            ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
+
+            textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
+            imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
+
 
             // set text from arraylist to gridview text
             textViewAndroid.setText(gridViewString.get(i));

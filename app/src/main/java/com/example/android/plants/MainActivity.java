@@ -26,7 +26,10 @@ public class MainActivity extends AppCompatActivity {
         // adding action bar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
