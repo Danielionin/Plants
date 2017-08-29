@@ -6,4 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.plants.SearchActivity">
 
+    <GridView
+        android:id="@+id/grid_view_image_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="110dp"
+        android:gravity="center"
+        android:numColumns="auto_fit" />
+
 </android.support.constraint.ConstraintLayout>

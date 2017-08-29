@@ -21,31 +21,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                .getBoolean("isfirstrun", true);
-
-        //check if first run
-//        if(false) { //TODO change to isFirstRun
-//            Toast.makeText(MainActivity.this, "First Run", Toast.LENGTH_LONG).show();
-//            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-//                    .putBoolean("isfirstrun", false).apply();
-//
-//            //start login activity
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            startActivity(intent);
-//
-//        }
         setContentView(R.layout.activity_main);
+
         // adding action bar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-
         setSupportActionBar(myToolbar);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
