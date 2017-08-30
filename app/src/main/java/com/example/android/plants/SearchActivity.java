@@ -30,75 +30,39 @@ public class SearchActivity extends AppCompatActivity {
     GridView androidGridView;
     ArrayList<String> gridViewNames = new ArrayList<>();
     ArrayList<String> gridViewImages = new ArrayList<>();
+    ArrayList<String> gridViewNamesBackup = new ArrayList<>();
+    ArrayList<String> gridViewImagesBackup = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        // adding action bar
-//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_search);
-//        setSupportActionBar(myToolbar);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewNames, gridViewImages);
+         final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewNames, gridViewImages);
         androidGridView=(GridView)findViewById(R.id.grid_view_image_text);
         androidGridView.setAdapter(adapterViewAndroid);
         androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int i, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Toast.makeText(SearchActivity.this, "GridView Item: ", Toast.LENGTH_LONG).show();
             }
         });
 
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         // Read from the database
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             // fill arrays with names and images
-            public void onDataChange(final DataSnapshot dataSnapshot) {
-
-                final EditText search_box = (EditText) findViewById(R.id.search_input);
-                //final String[] search_input = new String[1];
-                search_box.addTextChangedListener(new TextWatcher()
-                {
-                    @Override
-                    public void afterTextChanged(Editable mEdit){
-//                        gridViewNames.clear();
-//                        gridViewImages.clear();
-
-
-//                        for (DataSnapshot parent : dataSnapshot.getChildren()) {
-//                            String plantName = parent.getKey();
-//                            if(plantName.startsWith(search_input)) {
-//
-//                                gridViewNames.add(plantName);
-//                                String plant_img_url = parent.child("img_url").getValue().toString();
-//                                gridViewImages.add(plant_img_url);
-//
-//                            }
-//                        }
-
-//                        adapterViewAndroid.notifyDataSetChanged();
-
-                    }
-
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after){}
-
-                    public void onTextChanged(CharSequence s, int start, int before, int count){
-
-                    }
-                });
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot parent : dataSnapshot.getChildren()) {
                     String plantName = parent.getKey();
                     gridViewNames.add(plantName);
+                    gridViewNamesBackup.add(plantName);
                     String plant_img_url = parent.child("img_url").getValue().toString();
                     gridViewImages.add(plant_img_url);
-
+                    gridViewImagesBackup.add(plant_img_url);
                 }
                 adapterViewAndroid.notifyDataSetChanged();
             }
@@ -107,6 +71,35 @@ public class SearchActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 // Failed to read value
                 Log.w("SearchActivity", "Failed to read value.", databaseError.toException());
+            }
+
+
+        });
+
+        EditText search_box = (EditText) findViewById(R.id.search_input);
+        search_box.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void afterTextChanged(Editable mEdit){
+                gridViewNames.clear();
+                gridViewImages.clear();
+
+                for (int i=0; i < gridViewNamesBackup.size(); i++) {
+                    String name = gridViewNamesBackup.get(i);
+                    String url = gridViewImagesBackup.get(i);
+                    if (name.startsWith(mEdit.toString())) {
+                        gridViewNames.add(name);
+                        gridViewImages.add(url);
+                    }
+                }
+                adapterViewAndroid.notifyDataSetChanged();
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+
             }
         });
     }

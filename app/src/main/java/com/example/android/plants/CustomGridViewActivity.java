@@ -43,32 +43,36 @@ public class CustomGridViewActivity extends BaseAdapter {
         return 0;
     }
 
+    private void updateView(TextView textView, ImageView imgView, int i, View gridView) {
+
+        textView = (TextView) gridView.findViewById(R.id.android_gridview_text);
+        imgView = (ImageView) gridView.findViewById(R.id.android_gridview_image);
+
+        // set text from arraylist to gridview text
+        textView.setText(gridViewString.get(i));
+        // using Picasso library to insert image url in imageView in gridview
+        Picasso.with(mContext).load(gridViewImageId.get(i)).into(imgView);
+    }
+
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
         View gridViewAndroid;
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        TextView textViewAndroid = null;
+        ImageView imageViewAndroid = null;
+
         if (convertView == null) {
 
-            TextView textViewAndroid;
-            ImageView imageViewAndroid;
-
             //TODO maybe remove first line
-            gridViewAndroid = new View(mContext);
+            //gridViewAndroid = new View(mContext);
+
             gridViewAndroid = inflater.inflate(R.layout.gridview_layout, null);
-
-
-            textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
-            imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
-
-
-            // set text from arraylist to gridview text
-            textViewAndroid.setText(gridViewString.get(i));
-            //using Picasso library to insert image url in imageView in gridview
-            Picasso.with(mContext).load(gridViewImageId.get(i)).into(imageViewAndroid);
+            updateView(textViewAndroid, imageViewAndroid, i, gridViewAndroid);
         } else {
             gridViewAndroid = (View) convertView;
+            updateView(textViewAndroid, imageViewAndroid, i, gridViewAndroid);
         }
 
         return gridViewAndroid;
