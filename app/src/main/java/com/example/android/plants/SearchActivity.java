@@ -1,5 +1,6 @@
 package com.example.android.plants;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -38,14 +39,19 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-         final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewNames, gridViewImages);
+        // define an adapter for grid view
+        final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewNames, gridViewImages);
         androidGridView=(GridView)findViewById(R.id.grid_view_image_text);
         androidGridView.setAdapter(adapterViewAndroid);
         androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                Toast.makeText(SearchActivity.this, "GridView Item: ", Toast.LENGTH_LONG).show();
+                String plant_name = gridViewNames.get(+i);
+                Intent intent = new Intent(SearchActivity.this, PlantActivity.class);
+                // add plant name to intent for future database access
+                intent.putExtra("plant_name", plant_name);
+                startActivity(intent);
             }
         });
 
@@ -55,7 +61,6 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             // fill arrays with names and images
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 for (DataSnapshot parent : dataSnapshot.getChildren()) {
                     String plantName = parent.getKey();
                     gridViewNames.add(plantName);
@@ -64,6 +69,7 @@ public class SearchActivity extends AppCompatActivity {
                     gridViewImages.add(plant_img_url);
                     gridViewImagesBackup.add(plant_img_url);
                 }
+                // update view after changes
                 adapterViewAndroid.notifyDataSetChanged();
             }
 
@@ -80,6 +86,7 @@ public class SearchActivity extends AppCompatActivity {
         search_box.addTextChangedListener(new TextWatcher()
         {
             @Override
+            // change the content of the adapter's arrays, based on user's search word
             public void afterTextChanged(Editable mEdit){
                 gridViewNames.clear();
                 gridViewImages.clear();
@@ -99,7 +106,6 @@ public class SearchActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
 
             public void onTextChanged(CharSequence s, int start, int before, int count){
-
             }
         });
     }
