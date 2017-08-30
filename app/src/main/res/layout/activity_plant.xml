@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="0dp"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/background">
 
 
     <android.support.constraint.ConstraintLayout
@@ -89,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="20dp"
-            android:text="How To Plant"
+            android:text="How to Plant"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -111,7 +112,7 @@
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="8dp"
             android:text="Description"
             android:textSize="24sp"
             android:textStyle="bold"

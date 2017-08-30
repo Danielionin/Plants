@@ -17,4 +17,9 @@
     <string name="search">search</string>
     <string name="settings">settings</string>
     <string name="e_mail">E-mail</string>
+    <string-array name="sort_by">
+        <item>A-Z</item>
+        <item>Z-A</item>
+        <item>Difficulty</item>
+    </string-array>
 </resources>
