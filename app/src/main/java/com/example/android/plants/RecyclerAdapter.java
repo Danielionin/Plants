@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private String[] mDataset;
+    private ArrayList<String> mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -33,9 +33,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerAdapter(String[] myDataset) {
+    public RecyclerAdapter(ArrayList<String> myDataset) {
         mDataset = myDataset;
-        for (int i=0; i < myDataset.length; i++) {
+        for (int i=0; i < myDataset.size(); i++) {
         }
     }
 
@@ -66,6 +66,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
     }
 }
