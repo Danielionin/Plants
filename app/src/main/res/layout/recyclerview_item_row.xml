@@ -29,6 +29,7 @@
         android:background="@android:color/transparent"
         android:text="Blackberry"
         android:textAllCaps="false"
+        android:textColor="#d2e1b1"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="@+id/tree"
         app:layout_constraintTop_toTopOf="@+id/tree" />
@@ -42,6 +43,7 @@
         android:background="@android:color/transparent"
         android:text="Hot Pepper"
         android:textAllCaps="false"
+        android:textColor="#d2e1b1"
         android:textSize="16sp"
         app:layout_constraintRight_toRightOf="@+id/tree"
         app:layout_constraintTop_toTopOf="@+id/tree" />

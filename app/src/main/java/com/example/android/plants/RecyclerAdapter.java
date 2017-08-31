@@ -56,12 +56,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         if (position % 2 == 0) {
             holder.branch.setImageResource(R.drawable.right_leave_new);
             holder.leftButton.setVisibility(View.INVISIBLE);
+            holder.rightButton.setText(mDataset.get(position));
         }
         else {
             holder.branch.setImageResource(R.drawable.left_leave_new);
             holder.rightButton.setVisibility(View.INVISIBLE);
+            holder.leftButton.setText(mDataset.get(position));
         }
-
     }
 
     @Override

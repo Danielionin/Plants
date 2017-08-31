@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ImageButton searchButton;
+    private ImageButton settingsButton;
 
     private static ArrayList<String> my_plants = new ArrayList<>();
 
@@ -41,6 +42,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // take us to settings page
+        settingsButton = (ImageButton) findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(i);
             }
         });
