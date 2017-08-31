@@ -26,7 +26,6 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".SplashActivity" />
         <activity
             android:name=".SplashPicActivity"
             android:theme="@style/SplashTheme">
