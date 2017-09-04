@@ -58,15 +58,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        noPlantsMessage = (ImageView) findViewById(R.id.no_plants_text);
+
         // get plant name if we're coming from plant page (added plant)
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if (extras.containsKey("plant_name")) {
-                noPlantsMessage.setVisibility(View.INVISIBLE);
                 String plant_name = extras.getString("plant_name");
                 my_plants.add(plant_name);
             }
+        }
+
+        noPlantsMessage = (ImageView) findViewById(R.id.no_plants_text);
+        noPlantsMessage.setVisibility(View.INVISIBLE);
+        if(my_plants.isEmpty()) {
+            noPlantsMessage.setVisibility(View.VISIBLE);
         }
     }
 }

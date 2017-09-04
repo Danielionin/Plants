@@ -9,8 +9,8 @@
 
     <Switch
         android:id="@+id/switch1"
-        android:layout_width="298dp"
-        android:layout_height="30dp"
+        android:layout_width="343dp"
+        android:layout_height="34dp"
         android:text="Turn Notifications ON/OFF"
         android:layout_marginTop="61dp"
         app:layout_constraintTop_toBottomOf="@+id/imageView6"
