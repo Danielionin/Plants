@@ -83,8 +83,6 @@ public class SearchActivity extends AppCompatActivity {
                 // Failed to read value
                 Log.w("SearchActivity", "Failed to read value.", databaseError.toException());
             }
-
-
         });
 
         EditText search_box = (EditText) findViewById(R.id.search_input);
