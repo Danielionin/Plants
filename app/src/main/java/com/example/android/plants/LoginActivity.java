@@ -14,6 +14,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,12 +27,18 @@ public class LoginActivity extends AppCompatActivity {
     EditText password;
     Button registerButton;
     Button loginButton;
+    String token;
+    DatabaseReference rootRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+
+        // get user (phone) token and db reference, to be used later in signIn and account creation
+        //token = FirebaseInstanceId.getInstance().getToken();
+        rootRef = FirebaseDatabase.getInstance().getReference("Tokens");
 
         email = (EditText)findViewById(R.id.emailText);
         password = (EditText)findViewById(R.id.passText);
@@ -66,6 +75,11 @@ public class LoginActivity extends AppCompatActivity {
                         // if signup is OK
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                            // update phone token in db
+                            token = FirebaseInstanceId.getInstance().getToken();
+                            rootRef.child("token1").setValue(token);
+
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -88,6 +102,11 @@ public class LoginActivity extends AppCompatActivity {
                         // if login is OK
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                            // update phone token in db
+                            token = FirebaseInstanceId.getInstance().getToken();
+                            rootRef.child("token1").setValue(token);
+
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }

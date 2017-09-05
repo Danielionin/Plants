@@ -66,7 +66,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             // fill arrays with names and images
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot parent : dataSnapshot.getChildren()) {
+                for (DataSnapshot parent : dataSnapshot.child("Plants").getChildren()) {
                     String plantName = parent.getKey();
                     gridViewNames.add(plantName);
                     gridViewNamesBackup.add(plantName);

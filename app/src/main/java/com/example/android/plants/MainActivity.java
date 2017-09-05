@@ -1,6 +1,9 @@
 package com.example.android.plants;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,12 +25,22 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton searchButton;
     private ImageButton settingsButton;
 
-    private static ArrayList<String> my_plants = new ArrayList<>();
+    private static ArrayList<String> my_plants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences.Editor editor = prefs.edit();
+        Set<String> set = prefs.getStringSet("my_plants_set", null);
+        if (set == null) {
+            my_plants = new ArrayList<>();
+        }
+        else {
+            my_plants = new ArrayList<String>(set);
+        }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // use a linear layout manager
@@ -57,12 +72,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // get plant name if we're coming from plant page (added plant)
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            if (extras.containsKey("plant_name")) {
-                String plant_name = extras.getString("plant_name");
-                my_plants.add(plant_name);
-            }
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        editor = prefs.edit();
+        String plant_name = prefs.getString("plant_name", "no_id");
+        if (!plant_name.equals("no_id")) {
+            my_plants.add(plant_name);
+            editor.remove("plant_name");
+            editor.apply();
         }
+
+//        Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            if (extras.containsKey("plant_name")) {
+//                String plant_name = extras.getString("plant_name");
+//                my_plants.add(plant_name);
+//            }
+//        }
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        Set<String> set = new HashSet<String>();
+        set.addAll(my_plants);
+        editor.putStringSet("my_plants_set", set);
+        editor.commit();
     }
 }
