@@ -80,15 +80,9 @@ public class MainActivity extends AppCompatActivity {
             editor.remove("plant_name");
             editor.apply();
         }
-
-//        Bundle extras = getIntent().getExtras();
-//        if (extras != null) {
-//            if (extras.containsKey("plant_name")) {
-//                String plant_name = extras.getString("plant_name");
-//                my_plants.add(plant_name);
-//            }
-//        }
     }
+
+
     @Override
     public void onPause(){
         super.onPause();
