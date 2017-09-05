@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private ImageButton searchButton;
     private ImageButton settingsButton;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     private static ArrayList<String> my_plants;
 
@@ -32,13 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        SharedPreferences.Editor editor = prefs.edit();
+        // see if we already have a plants array, and use it if we do
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         Set<String> set = prefs.getStringSet("my_plants_set", null);
         if (set == null) {
             my_plants = new ArrayList<>();
-        }
-        else {
+        } else {
             my_plants = new ArrayList<String>(set);
         }
 
@@ -72,22 +73,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // get plant name if we're coming from plant page (added plant)
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        editor = prefs.edit();
         String plant_name = prefs.getString("plant_name", "no_id");
         if (!plant_name.equals("no_id")) {
             my_plants.add(plant_name);
+            editor = prefs.edit();
             editor.remove("plant_name");
             editor.apply();
         }
     }
 
-
+    // all this part is to save the plant array on the sharedPrefrences
+    // after we leave this activity
     @Override
     public void onPause(){
         super.onPause();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        SharedPreferences.Editor editor = prefs.edit();
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        editor = prefs.edit();
 
         Set<String> set = new HashSet<String>();
         set.addAll(my_plants);
