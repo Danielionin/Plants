@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private ImageButton searchButton;
     private ImageButton settingsButton;
+    private ImageView no_plants_view;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             my_plants = new ArrayList<String>(set);
         }
+
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // use a linear layout manager
@@ -79,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
             editor = prefs.edit();
             editor.remove("plant_name");
             editor.apply();
+        }
+
+        if (!my_plants.isEmpty()) {
+            no_plants_view = (ImageView) findViewById(R.id.no_plant_msg);
+            no_plants_view.setVisibility(View.GONE);
         }
     }
 

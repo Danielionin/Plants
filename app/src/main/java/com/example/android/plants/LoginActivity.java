@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String emailText = email.getText().toString();
                         String passwordText = password.getText().toString();
+                        FirebaseMessaging.getInstance().subscribeToTopic("Plants");
                         createAccount(emailText, passwordText);
                     }
                 }
@@ -60,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String emailText = email.getText().toString();
                         String passwordText = password.getText().toString();
+                        FirebaseMessaging.getInstance().subscribeToTopic("Plants");
                         signIn(emailText, passwordText);
                     }
                 }
@@ -90,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Registration Failed",
                                     Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 });
     }
@@ -117,8 +121,12 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Login Failed",
                                     Toast.LENGTH_SHORT).show();
                         }
+
+
                     }
                 });
+
+
     }
 }
 
