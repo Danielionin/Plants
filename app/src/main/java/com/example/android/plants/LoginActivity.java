@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String emailText = email.getText().toString();
                         String passwordText = password.getText().toString();
-                        FirebaseMessaging.getInstance().subscribeToTopic("Plants");
                         createAccount(emailText, passwordText);
                     }
                 }
@@ -62,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String emailText = email.getText().toString();
                         String passwordText = password.getText().toString();
-                        FirebaseMessaging.getInstance().subscribeToTopic("Plants");
                         signIn(emailText, passwordText);
                     }
                 }
