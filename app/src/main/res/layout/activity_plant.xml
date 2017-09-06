@@ -135,9 +135,9 @@
 
         <Button
             android:id="@+id/add_button"
-            android:layout_width="65dp"
-            android:layout_height="51dp"
-            android:layout_marginLeft="8dp"
+            android:layout_width="74dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/add_button"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -145,12 +145,12 @@
 
         <Button
             android:id="@+id/sensor_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintRight_toLeftOf="@+id/image"
-            android:layout_marginRight="9dp"
+            android:layout_width="74dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="18dp"
             android:layout_marginTop="16dp"
+            android:background="@drawable/sensor_button"
+            app:layout_constraintRight_toLeftOf="@+id/image"
             app:layout_constraintTop_toBottomOf="@+id/stars" />
 
         <TextView
@@ -176,12 +176,12 @@
 
         <Button
             android:id="@+id/remove_button"
-            android:visibility="gone"
-            android:layout_width="65dp"
-            android:layout_height="51dp"
-            android:layout_marginLeft="8dp"
+            android:layout_width="74dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/full_logo"
+            android:background="@drawable/remove_button"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/stars" />
 

@@ -46,6 +46,7 @@ public class PlantActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         final String plant_name = bundle.getString("plant_name");
         String isPlanted = bundle.getString("is_planted");
+        //String sensorMode = bundle.getString("sensor_mode");
 
         // assign views
         titleView = (TextView) findViewById(R.id.title);
@@ -106,6 +107,17 @@ public class PlantActivity extends AppCompatActivity {
             addButton.setVisibility(View.VISIBLE);
         }
 
+//        if (sensorMode.equals("True")) {
+//            sensorButton.setBackgroundResource(R.drawable.sensor_button_pressed);
+//            sensorButton.setEnabled(false);
+//        }
+//        else {
+//            sensorButton.setBackgroundResource(R.drawable.sensor_button);
+//            sensorButton.setEnabled(true);
+//
+//        }
+
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,12 +135,19 @@ public class PlantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 plant_db.child("Planted").setValue("False");
+                Log.d("wowowow", "wowowow");
+              //  plant_db.child("Sensor").setValue("False");
+                Log.d("gilgilgilgil", "gilgilgilgil");
+
                 Toast.makeText(PlantActivity.this, "Plant removed", Toast.LENGTH_SHORT).show();
 
                 dateView.setVisibility(View.INVISIBLE);
                 wateredView.setVisibility(View.INVISIBLE);
                 removeButton.setVisibility(View.GONE);
                 addButton.setVisibility(View.VISIBLE);
+                //sensorButton.setEnabled(true);
+                //sensorButton.setBackgroundResource(R.drawable.sensor_button);
+
             }
         });
 

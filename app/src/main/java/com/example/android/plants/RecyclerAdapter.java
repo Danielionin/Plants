@@ -10,10 +10,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
+    private DatabaseReference firebaseDB;
     private ArrayList<String> mDataset;
 
     // Provide a reference to the views for each data item
@@ -58,6 +65,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             holder.branch.setImageResource(R.drawable.right_leave_new);
             holder.leftButton.setVisibility(View.INVISIBLE);
             final String plant_name = mDataset.get(position);
+//            final String sensor_mode;
+//
+//            firebaseDB = FirebaseDatabase.getInstance().getReference("Plants").child("Sensor");
+//            firebaseDB.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    sensor_mode = dataSnapshot.child(plant_name).getValue().tos
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+
+
             holder.rightButton.setText(plant_name);
             holder.rightButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,6 +88,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     Intent i = new Intent(v.getContext(), PlantActivity.class);
                     i.putExtra("plant_name", plant_name);
                     i.putExtra("is_planted", "True");
+                   // i.putExtra("sensor_mode", sensor_mode);
                     v.getContext().startActivity(i);
                 }
             });
@@ -80,6 +104,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     Intent i = new Intent(v.getContext(), PlantActivity.class);
                     i.putExtra("plant_name", plant_name);
                     i.putExtra("is_planted", "True");
+                 //   i.putExtra("sensor_mode", sensor_mode);
                     v.getContext().startActivity(i);
                 }
             });
