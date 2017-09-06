@@ -44,15 +44,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        x = (Button) findViewById(R.id.button_left);
-//        x.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(MainActivity.this, SearchActivity.class);
-//            }
-//        });
-
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, true);

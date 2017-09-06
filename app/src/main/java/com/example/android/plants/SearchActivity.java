@@ -62,6 +62,8 @@ public class SearchActivity extends AppCompatActivity {
                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        // we add "is_planted" so the plant page will know what button to display ("add" or "remove")
                         isPlanted = dataSnapshot.child("Plants").child(plant_name).child("Planted").getValue().toString();
                         intent.putExtra("is_planted", isPlanted);
                         startActivity(intent);

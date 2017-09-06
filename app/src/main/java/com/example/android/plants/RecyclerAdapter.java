@@ -1,5 +1,6 @@
 package com.example.android.plants;
 
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -43,10 +44,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        // create a new view
+        // create a new view by inflating it
         View v = (View) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_item_row, parent, false);
-
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -57,12 +57,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         if (position % 2 == 0) {
             holder.branch.setImageResource(R.drawable.right_leave_new);
             holder.leftButton.setVisibility(View.INVISIBLE);
-            holder.rightButton.setText(mDataset.get(position));
+            final String plant_name = mDataset.get(position);
+            holder.rightButton.setText(plant_name);
+            holder.rightButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), PlantActivity.class);
+                    i.putExtra("plant_name", plant_name);
+                    i.putExtra("is_planted", "True");
+                    v.getContext().startActivity(i);
+                }
+            });
         }
         else {
             holder.branch.setImageResource(R.drawable.left_leave_new);
             holder.rightButton.setVisibility(View.INVISIBLE);
-            holder.leftButton.setText(mDataset.get(position));
+            final String plant_name = mDataset.get(position);
+            holder.leftButton.setText(plant_name);
+            holder.leftButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), PlantActivity.class);
+                    i.putExtra("plant_name", plant_name);
+                    i.putExtra("is_planted", "True");
+                    v.getContext().startActivity(i);
+                }
+            });
         }
     }
 
