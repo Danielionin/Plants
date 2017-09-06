@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -49,8 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
         signoutButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+                        FirebaseAuth.getInstance().signOut();
+                        Intent i = new Intent(SettingsActivity.this, LoginActivity.class);
                         startActivity(i);
+                        finish();
                     }
                 }
         );
