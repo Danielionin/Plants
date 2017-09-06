@@ -2,6 +2,7 @@ package com.example.android.plants;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class PlantActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
+    TextView water_status;
     TextView titleView;
     TextView descriptionView;
     TextView how_to_plantView;
@@ -58,6 +64,7 @@ public class PlantActivity extends AppCompatActivity {
         addButton = (Button) findViewById(R.id.add_button);
         removeButton = (Button) findViewById(R.id.remove_button);
         sensorButton = (Button) findViewById(R.id.sensor_button);
+        water_status = (TextView) findViewById(R.id.water_status);
 
         dateView = (TextView) findViewById(R.id.date);
         wateredView = (TextView) findViewById(R.id.watered);
@@ -75,6 +82,8 @@ public class PlantActivity extends AppCompatActivity {
                 String plant_img = dataSnapshot.child("plant_img").getValue(String.class);
                 String how_to_plant = dataSnapshot.child("How To Plant").getValue(String.class);
                 String how_to_grow = dataSnapshot.child("How To Grow").getValue(String.class);
+                String plant_date = dataSnapshot.child("Date").getValue(String.class);
+                String water_status = dataSnapshot.child("Water").getValue(String.class);
                 int how_difficult = dataSnapshot.child("difficult").getValue(int.class);
 
                 // assign text values to relevant views
@@ -82,6 +91,21 @@ public class PlantActivity extends AppCompatActivity {
                 descriptionView.setText(description);
                 how_to_plantView.setText(how_to_plant);
                 how_to_growView.setText(how_to_grow);
+                dateView.setText(plant_date);
+
+                if(water_status.equals("True")) {
+                    wateredView.setTextColor(Color.BLUE);
+                    wateredView.setText("Watered");
+                }
+                else if(water_status.equals("False")) {
+                    wateredView.setTextColor(Color.RED);
+                    wateredView.setText("Dry");
+                }
+                else {
+                    wateredView.setTextColor(Color.BLACK);
+                    wateredView.setText("N/A");
+                }
+
                 Picasso.with(PlantActivity.this).load(plant_img).into(imageView);
                 // make R.drawable.imagename as integer and send to setImageSource
                 int resourceId = getResources().getIdentifier("star" + Integer.toString(how_difficult), "drawable", getPackageName());
@@ -122,12 +146,23 @@ public class PlantActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //  get today's date
+                Date today = Calendar.getInstance().getTime();
+                // create a date "formatter" (the date format we want)
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                // create a new String using the date format we want
+                String currentTime = formatter.format(today);
+                plant_db.child("Date").setValue("Date: " + currentTime);
+                dateView.setText("Date: " + currentTime);
+
                 plant_db.child("Planted").setValue("True");
                 Toast.makeText(PlantActivity.this, "Plant added", Toast.LENGTH_SHORT).show();
                 dateView.setVisibility(View.VISIBLE);
                 wateredView.setVisibility(View.VISIBLE);
                 addButton.setVisibility(View.GONE);
                 removeButton.setVisibility(View.VISIBLE);
+                water_status.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -135,9 +170,7 @@ public class PlantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 plant_db.child("Planted").setValue("False");
-                Log.d("wowowow", "wowowow");
               //  plant_db.child("Sensor").setValue("False");
-                Log.d("gilgilgilgil", "gilgilgilgil");
 
                 Toast.makeText(PlantActivity.this, "Plant removed", Toast.LENGTH_SHORT).show();
 
@@ -145,6 +178,8 @@ public class PlantActivity extends AppCompatActivity {
                 wateredView.setVisibility(View.INVISIBLE);
                 removeButton.setVisibility(View.GONE);
                 addButton.setVisibility(View.VISIBLE);
+                water_status.setVisibility(View.GONE);
+
                 //sensorButton.setEnabled(true);
                 //sensorButton.setBackgroundResource(R.drawable.sensor_button);
 
