@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private DatabaseReference mDatabase;
     GridView androidGridView;
@@ -31,6 +32,9 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<String> gridViewImagesBackup = new ArrayList<>();
     String isPlanted;
 
+    private Spinner spinner;
+    private static final String[]paths = {"A-Z", "Z-A", "Difficulty"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +42,13 @@ public class SearchActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sort_by, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
+        // define "sort-by" drop-down menu
+        spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String>adapter = new ArrayAdapter<String>(SearchActivity.this,
+                android.R.layout.simple_spinner_item,paths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         // define an adapter for grid view
         final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewNames, gridViewImages);
@@ -74,10 +77,8 @@ public class SearchActivity extends AppCompatActivity {
 
                     }
                 });
-
             }
         });
-
 
         // Read from the database
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -121,7 +122,6 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 }
                 adapterViewAndroid.notifyDataSetChanged();
-
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
@@ -132,4 +132,25 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                Toast.makeText(this, "hey1", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                Toast.makeText(this, "hey2", Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                // Whatever you want to happen when the thrid item gets selected
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
