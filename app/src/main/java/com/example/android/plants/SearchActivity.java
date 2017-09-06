@@ -21,16 +21,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private DatabaseReference mDatabase;
     GridView androidGridView;
-    ArrayList<String> gridViewNames = new ArrayList<>();
-    ArrayList<String> gridViewImages = new ArrayList<>();
-    ArrayList<String> gridViewNamesBackup = new ArrayList<>();
-    ArrayList<String> gridViewImagesBackup = new ArrayList<>();
+//    ArrayList<String> gridViewNames = new ArrayList<>();
+//    ArrayList<String> gridViewImages = new ArrayList<>();
+//    ArrayList<String> gridViewNamesBackup = new ArrayList<>();
+//    ArrayList<String> gridViewImagesBackup = new ArrayList<>();
+    ArrayList<Plant> gridViewArray = new ArrayList<>();
+    ArrayList<Plant> gridViewArrayBackup = new ArrayList<>();
     String isPlanted;
+    Plant plant;
 
     private Spinner spinner;
     private static final String[]paths = {"A-Z", "Z-A", "Difficulty"};
@@ -51,14 +56,14 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
 
         // define an adapter for grid view
-        final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewNames, gridViewImages);
+        final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewArray);
         androidGridView=(GridView)findViewById(R.id.grid_view_image_text);
         androidGridView.setAdapter(adapterViewAndroid);
 
         androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                final String plant_name = gridViewNames.get(+i);
+                final String plant_name = gridViewArray.get(+i).plant_name;
                 final Intent intent = new Intent(SearchActivity.this, PlantActivity.class);
                 // add plant name to intent for future database access
                 intent.putExtra("plant_name", plant_name);
@@ -87,11 +92,14 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot parent : dataSnapshot.child("Plants").getChildren()) {
                     String plantName = parent.getKey();
-                    gridViewNames.add(plantName);
-                    gridViewNamesBackup.add(plantName);
+                    //gridViewNames.add(plantName);
+                    //gridViewNamesBackup.add(plantName);
                     String plant_img_url = parent.child("img_url").getValue().toString();
-                    gridViewImages.add(plant_img_url);
-                    gridViewImagesBackup.add(plant_img_url);
+                    //gridViewImages.add(plant_img_url);
+                    //gridViewImagesBackup.add(plant_img_url);
+                    plant = new Plant(plantName, plant_img_url);
+                    gridViewArray.add(plant);
+                    gridViewArrayBackup.add(plant);
                 }
                 // update view after changes
                 adapterViewAndroid.notifyDataSetChanged();
@@ -110,15 +118,24 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             @Override
             // change the content of the adapter's arrays, based on user's search word
             public void afterTextChanged(Editable mEdit){
-                gridViewNames.clear();
-                gridViewImages.clear();
+//                gridViewNames.clear();
+//                gridViewImages.clear();
+                gridViewArray.clear();
 
-                for (int i=0; i < gridViewNamesBackup.size(); i++) {
-                    String name = gridViewNamesBackup.get(i);
-                    String url = gridViewImagesBackup.get(i);
+//                for (int i=0; i < gridViewNamesBackup.size(); i++) {
+//                    String name = gridViewNamesBackup.get(i);
+//                    String url = gridViewImagesBackup.get(i);
+//                    if (name.startsWith(mEdit.toString())) {
+//                        gridViewNames.add(name);
+//                        gridViewImages.add(url);
+//                    }
+//                }
+                for (int i=0; i < gridViewArrayBackup.size(); i++) {
+                    String name = gridViewArrayBackup.get(i).plant_name;
+                    String url = gridViewArrayBackup.get(i).url;
                     if (name.startsWith(mEdit.toString())) {
-                        gridViewNames.add(name);
-                        gridViewImages.add(url);
+                        Plant temp = new Plant(name, url);
+                        gridViewArray.add(temp);
                     }
                 }
                 adapterViewAndroid.notifyDataSetChanged();
@@ -137,6 +154,11 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         switch (position) {
             case 0:
                 Toast.makeText(this, "hey1", Toast.LENGTH_SHORT).show();
+                Collections.sort(gridViewArray, new Comparator<Plant>() {
+                    public int compare(Plant o1, Plant o2) {
+                        return o1.plant_name.compareTo(o2.plant_name);
+                    }
+                });
                 break;
             case 1:
                 Toast.makeText(this, "hey2", Toast.LENGTH_SHORT).show();

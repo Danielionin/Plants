@@ -19,18 +19,20 @@ import java.util.ArrayList;
 public class CustomGridViewActivity extends BaseAdapter {
 
     private Context mContext;
-    private final ArrayList<String> gridViewString;
-    private final ArrayList<String> gridViewImageId;
+//    private final ArrayList<String> gridViewString;
+//    private final ArrayList<String> gridViewImageId;
+    private final ArrayList<Plant> gridViewPlant;
 
-    public CustomGridViewActivity(Context context, ArrayList<String> gridViewString, ArrayList<String> gridViewImageId) {
+    public CustomGridViewActivity(Context context, ArrayList<Plant> gridViewPlant) {
         mContext = context;
-        this.gridViewImageId = gridViewImageId;
-        this.gridViewString = gridViewString;
+//        this.gridViewImageId = gridViewImageId;
+//        this.gridViewString = gridViewString;
+        this.gridViewPlant = gridViewPlant;
     }
 
     @Override
     public int getCount() {
-        return gridViewString.size();
+        return gridViewPlant.size();
     }
 
     @Override
@@ -49,9 +51,9 @@ public class CustomGridViewActivity extends BaseAdapter {
         imgView = (ImageView) gridView.findViewById(R.id.android_gridview_image);
 
         // set text from arraylist to gridview text
-        textView.setText(gridViewString.get(i));
+        textView.setText(gridViewPlant.get(i).plant_name);
         // using Picasso library to insert image url in imageView in gridview
-        Picasso.with(mContext).load(gridViewImageId.get(i)).into(imgView);
+        Picasso.with(mContext).load(gridViewPlant.get(i).url).into(imgView);
     }
 
     @Override
