@@ -1,14 +1,11 @@
 package com.example.android.plants;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,8 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,20 +76,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // all this part is to save the plant array on the sharedPrefrences
-    // after we leave this activity
-    @Override
-    public void onPause(){
-        super.onPause();
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        editor = prefs.edit();
-
-        Set<String> set = new HashSet<String>();
-        set.addAll(my_plants);
-        editor.putStringSet("my_plants_set", set);
-        editor.commit();
-    }
-
     @Override
     // called when we get to this activity using back button
     public void onResume(){
@@ -129,17 +110,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        // get plant name from shared preferences (defined by add button in plant activity)
-//        String plant_name = prefs.getString("plant_name", "no_id");
-//        if (!plant_name.equals("no_id")) {
-//            my_plants.add(plant_name);
-//            editor = prefs.edit();
-//            editor.remove("plant_name");
-//            editor.apply();
-//            mAdapter.notifyDataSetChanged();
-//        }
-
-
     }
 }
