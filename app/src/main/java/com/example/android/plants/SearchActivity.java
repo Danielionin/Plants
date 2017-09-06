@@ -156,12 +156,18 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                 Toast.makeText(this, "hey1", Toast.LENGTH_SHORT).show();
                 Collections.sort(gridViewArray, new Comparator<Plant>() {
                     public int compare(Plant o1, Plant o2) {
+                        Log.d("as","ad");
                         return o1.plant_name.compareTo(o2.plant_name);
                     }
                 });
                 break;
             case 1:
                 Toast.makeText(this, "hey2", Toast.LENGTH_SHORT).show();
+                Collections.sort(gridViewArray, new Comparator<Plant>() {
+                    public int compare(Plant o1, Plant o2) {
+                        return o2.plant_name.compareTo(o1.plant_name);
+                    }
+                });
                 break;
             case 2:
                 // Whatever you want to happen when the thrid item gets selected
