@@ -28,12 +28,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
     private DatabaseReference mDatabase;
     GridView androidGridView;
-//    ArrayList<String> gridViewNames = new ArrayList<>();
-//    ArrayList<String> gridViewImages = new ArrayList<>();
-//    ArrayList<String> gridViewNamesBackup = new ArrayList<>();
-//    ArrayList<String> gridViewImagesBackup = new ArrayList<>();
     ArrayList<Plant> gridViewArray = new ArrayList<>();
     ArrayList<Plant> gridViewArrayBackup = new ArrayList<>();
+    final CustomGridViewActivity adapterViewAndroid= new CustomGridViewActivity(SearchActivity.this, gridViewArray);
     String isPlanted;
     Plant plant;
 
@@ -56,7 +53,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
 
         // define an adapter for grid view
-        final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewArray);
+        //adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewArray);
         androidGridView=(GridView)findViewById(R.id.grid_view_image_text);
         androidGridView.setAdapter(adapterViewAndroid);
 
@@ -92,12 +89,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot parent : dataSnapshot.child("Plants").getChildren()) {
                     String plantName = parent.getKey();
-                    //gridViewNames.add(plantName);
-                    //gridViewNamesBackup.add(plantName);
                     String plant_img_url = parent.child("img_url").getValue().toString();
-                    //gridViewImages.add(plant_img_url);
-                    //gridViewImagesBackup.add(plant_img_url);
-                    plant = new Plant(plantName, plant_img_url);
+                    int difficulty = parent.child("difficult").getValue(int.class);
+                    plant = new Plant(plantName, plant_img_url, difficulty);
                     gridViewArray.add(plant);
                     gridViewArrayBackup.add(plant);
                 }
@@ -118,23 +112,12 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             @Override
             // change the content of the adapter's arrays, based on user's search word
             public void afterTextChanged(Editable mEdit){
-//                gridViewNames.clear();
-//                gridViewImages.clear();
-                gridViewArray.clear();
-
-//                for (int i=0; i < gridViewNamesBackup.size(); i++) {
-//                    String name = gridViewNamesBackup.get(i);
-//                    String url = gridViewImagesBackup.get(i);
-//                    if (name.startsWith(mEdit.toString())) {
-//                        gridViewNames.add(name);
-//                        gridViewImages.add(url);
-//                    }
-//                }
                 for (int i=0; i < gridViewArrayBackup.size(); i++) {
                     String name = gridViewArrayBackup.get(i).plant_name;
                     String url = gridViewArrayBackup.get(i).url;
+                    int difficulty = gridViewArrayBackup.get(i).difficulty;
                     if (name.startsWith(mEdit.toString())) {
-                        Plant temp = new Plant(name, url);
+                        Plant temp = new Plant(name, url, difficulty);
                         gridViewArray.add(temp);
                     }
                 }
@@ -153,24 +136,36 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
-                Toast.makeText(this, "hey1", Toast.LENGTH_SHORT).show();
                 Collections.sort(gridViewArray, new Comparator<Plant>() {
                     public int compare(Plant o1, Plant o2) {
-                        Log.d("as","ad");
                         return o1.plant_name.compareTo(o2.plant_name);
                     }
                 });
+                adapterViewAndroid.notifyDataSetChanged();
                 break;
+
             case 1:
-                Toast.makeText(this, "hey2", Toast.LENGTH_SHORT).show();
                 Collections.sort(gridViewArray, new Comparator<Plant>() {
                     public int compare(Plant o1, Plant o2) {
                         return o2.plant_name.compareTo(o1.plant_name);
                     }
                 });
+                adapterViewAndroid.notifyDataSetChanged();
                 break;
+
             case 2:
-                // Whatever you want to happen when the thrid item gets selected
+                Collections.sort(gridViewArray, new Comparator<Plant>() {
+                    public int compare(Plant o1, Plant o2) {
+                        if (o1.difficulty < o2.difficulty) {
+                            return -1;
+                        }
+                        else if (o1.difficulty > o2.difficulty) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+                adapterViewAndroid.notifyDataSetChanged();
                 break;
 
         }
