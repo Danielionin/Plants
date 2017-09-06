@@ -3,6 +3,7 @@ package com.example.android.plants;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +30,12 @@ public class PlantActivity extends AppCompatActivity {
     ImageView imageView;
     ImageView difficultView;
     Button addButton;
+    Button removeButton;
     Button sensorButton;
+    TextView dateView;
+    TextView wateredView;
+    TextView descriptionTitleView;
+    String addButtonStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,7 @@ public class PlantActivity extends AppCompatActivity {
         //get plant name
         Bundle bundle = getIntent().getExtras();
         final String plant_name = bundle.getString("plant_name");
+        String isPlanted = bundle.getString("is_planted");
 
         // assign views
         titleView = (TextView) findViewById(R.id.title);
@@ -48,57 +55,16 @@ public class PlantActivity extends AppCompatActivity {
         how_to_growView = (TextView) findViewById(R.id.how_to_grow);
         difficultView = (ImageView) findViewById(R.id.stars);
         addButton = (Button) findViewById(R.id.add_button);
+        removeButton = (Button) findViewById(R.id.remove_button);
         sensorButton = (Button) findViewById(R.id.sensor_button);
+
+        dateView = (TextView) findViewById(R.id.date);
+        wateredView = (TextView) findViewById(R.id.watered);
+        descriptionTitleView = (TextView) findViewById(R.id.description_title);
 
         //get database
         mDatabase = FirebaseDatabase.getInstance().getReference("Plants");
         final DatabaseReference plant_db = mDatabase.child(plant_name);
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                plant_db.child("Planted").setValue("True");
-
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(PlantActivity.this);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("plant_name", plant_name);
-                Toast.makeText(PlantActivity.this, "Plant added", Toast.LENGTH_SHORT).show();
-                editor.apply();
-            }
-        });
-
-        sensorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                    //check that the plant is added before allowing to set sensor
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String isPlanted = dataSnapshot.child(plant_name).child("Planted").getValue(String.class);
-                        if (isPlanted.equals("True")) {
-                            // set all other sensors to false
-                            for (DataSnapshot parent : dataSnapshot.getChildren()) {
-                                parent.child("Sensor").getRef().setValue("False");
-                            }
-                            plant_db.child("Sensor").setValue("True");
-
-                            Intent i = new Intent(PlantActivity.this, MainActivity.class);
-                            // add plant name to intent for future database access
-                            //i.putExtra("plant_name", plant_name);
-                            startActivity(i);
-                        }
-                        else {
-                            Toast.makeText(PlantActivity.this, "You need to add a plant first", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        });
 
         //Read from the database
         plant_db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -127,6 +93,79 @@ public class PlantActivity extends AppCompatActivity {
                 Log.w("SearchActivity", "Failed to read value.", databaseError.toException());
             }
         });
+
+        if (isPlanted.equals("True")) {
+            dateView.setVisibility(View.VISIBLE);
+            wateredView.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.GONE);
+            removeButton.setVisibility(View.VISIBLE);
+        } else {
+            dateView.setVisibility(View.INVISIBLE);
+            wateredView.setVisibility(View.INVISIBLE);
+            removeButton.setVisibility(View.GONE);
+            addButton.setVisibility(View.VISIBLE);
+        }
+
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                plant_db.child("Planted").setValue("True");
+                Toast.makeText(PlantActivity.this, "Plant added", Toast.LENGTH_SHORT).show();
+                dateView.setVisibility(View.VISIBLE);
+                wateredView.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.GONE);
+                removeButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                plant_db.child("Planted").setValue("False");
+                Toast.makeText(PlantActivity.this, "Plant removed", Toast.LENGTH_SHORT).show();
+
+                dateView.setVisibility(View.INVISIBLE);
+                wateredView.setVisibility(View.INVISIBLE);
+                removeButton.setVisibility(View.GONE);
+                addButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        sensorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    //check that the plant is added before allowing to set sensor
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String isPlanted = dataSnapshot.child(plant_name).child("Planted").getValue(String.class);
+                        if (isPlanted.equals("True")) {
+                            // set all other sensors to false
+                            for (DataSnapshot parent : dataSnapshot.getChildren()) {
+                                parent.child("Sensor").getRef().setValue("False");
+                                parent.child("Water").getRef().setValue("N/A");
+                            }
+                            plant_db.child("Sensor").setValue("True");
+                            plant_db.child("Water").setValue("False");
+
+                            Intent i = new Intent(PlantActivity.this, MainActivity.class);
+                            startActivity(i);
+                        }
+                        else {
+                            Toast.makeText(PlantActivity.this, "You need to add a plant first", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
+
 
     }
 }

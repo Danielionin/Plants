@@ -29,11 +29,14 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<String> gridViewImages = new ArrayList<>();
     ArrayList<String> gridViewNamesBackup = new ArrayList<>();
     ArrayList<String> gridViewImagesBackup = new ArrayList<>();
+    String isPlanted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -48,19 +51,32 @@ public class SearchActivity extends AppCompatActivity {
         final CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(SearchActivity.this, gridViewNames, gridViewImages);
         androidGridView=(GridView)findViewById(R.id.grid_view_image_text);
         androidGridView.setAdapter(adapterViewAndroid);
-        androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+        androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                String plant_name = gridViewNames.get(+i);
-                Intent intent = new Intent(SearchActivity.this, PlantActivity.class);
+                final String plant_name = gridViewNames.get(+i);
+                final Intent intent = new Intent(SearchActivity.this, PlantActivity.class);
                 // add plant name to intent for future database access
                 intent.putExtra("plant_name", plant_name);
-                startActivity(intent);
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        isPlanted = dataSnapshot.child("Plants").child(plant_name).child("Planted").getValue().toString();
+                        intent.putExtra("is_planted", isPlanted);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         // Read from the database
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

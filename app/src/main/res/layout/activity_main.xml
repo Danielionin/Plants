@@ -68,6 +68,7 @@
 
     <ImageView
         android:id="@+id/no_plant_msg"
+        android:visibility="gone"
         android:layout_width="219dp"
         android:layout_height="108dp"
         app:srcCompat="@drawable/message_no_plants"

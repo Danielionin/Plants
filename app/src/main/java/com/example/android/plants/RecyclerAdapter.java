@@ -47,6 +47,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         View v = (View) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_item_row, parent, false);
 
+
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
