@@ -27,10 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton searchButton;
     private ImageButton settingsButton;
     private ImageView no_plants_view;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
     private DatabaseReference mDatabase;
-    private Button x;
 
     private static ArrayList<String> my_plants = new ArrayList<>();;
 
