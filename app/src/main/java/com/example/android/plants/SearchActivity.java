@@ -112,6 +112,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             @Override
             // change the content of the adapter's arrays, based on user's search word
             public void afterTextChanged(Editable mEdit){
+                gridViewArray.clear();
                 for (int i=0; i < gridViewArrayBackup.size(); i++) {
                     String name = gridViewArrayBackup.get(i).plant_name;
                     String url = gridViewArrayBackup.get(i).url;

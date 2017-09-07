@@ -207,6 +207,7 @@ public class PlantActivity extends AppCompatActivity {
 
                             Intent i = new Intent(PlantActivity.this, MainActivity.class);
                             startActivity(i);
+                            finish();
                         }
                         else {
                             Toast.makeText(PlantActivity.this, "You need to add a plant first", Toast.LENGTH_SHORT).show();
