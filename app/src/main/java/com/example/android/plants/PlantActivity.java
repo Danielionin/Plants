@@ -41,7 +41,6 @@ public class PlantActivity extends AppCompatActivity {
     TextView dateView;
     TextView wateredView;
     TextView descriptionTitleView;
-    String addButtonStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,7 @@ public class PlantActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         final String plant_name = bundle.getString("plant_name");
         String isPlanted = bundle.getString("is_planted");
-        //String sensorMode = bundle.getString("sensor_mode");
+        String sensorMode = bundle.getString("sensor_mode");
 
         // assign views
         titleView = (TextView) findViewById(R.id.title);
@@ -65,7 +64,6 @@ public class PlantActivity extends AppCompatActivity {
         removeButton = (Button) findViewById(R.id.remove_button);
         sensorButton = (Button) findViewById(R.id.sensor_button);
         water_status = (TextView) findViewById(R.id.water_status);
-
         dateView = (TextView) findViewById(R.id.date);
         wateredView = (TextView) findViewById(R.id.watered);
         descriptionTitleView = (TextView) findViewById(R.id.description_title);
@@ -75,7 +73,7 @@ public class PlantActivity extends AppCompatActivity {
         final DatabaseReference plant_db = mDatabase.child(plant_name);
 
         //Read from the database
-        plant_db.addListenerForSingleValueEvent(new ValueEventListener() {
+        plant_db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String description = dataSnapshot.child("Description").getValue(String.class);
@@ -92,8 +90,7 @@ public class PlantActivity extends AppCompatActivity {
                 how_to_plantView.setText(how_to_plant);
                 how_to_growView.setText(how_to_grow);
                 dateView.setText(plant_date);
-
-                if(water_status.equals("True")) {
+                if (water_status.equals("True")) {
                     wateredView.setTextColor(Color.BLUE);
                     wateredView.setText("Watered");
                 }
@@ -124,22 +121,25 @@ public class PlantActivity extends AppCompatActivity {
             wateredView.setVisibility(View.VISIBLE);
             addButton.setVisibility(View.GONE);
             removeButton.setVisibility(View.VISIBLE);
+
+            if (sensorMode.equals("True")) {
+                sensorButton.setBackgroundResource(R.drawable.sensor_button_pressed);
+                sensorButton.setEnabled(false);
+            }
+            else {
+                sensorButton.setBackgroundResource(R.drawable.sensor_button);
+                sensorButton.setEnabled(true);
+            }
+
         } else {
             dateView.setVisibility(View.INVISIBLE);
             wateredView.setVisibility(View.INVISIBLE);
+            water_status.setVisibility(View.GONE);
             removeButton.setVisibility(View.GONE);
             addButton.setVisibility(View.VISIBLE);
+            sensorButton.setBackgroundResource(R.drawable.sensor_button_pressed);
+            sensorButton.setEnabled(false);
         }
-
-//        if (sensorMode.equals("True")) {
-//            sensorButton.setBackgroundResource(R.drawable.sensor_button_pressed);
-//            sensorButton.setEnabled(false);
-//        }
-//        else {
-//            sensorButton.setBackgroundResource(R.drawable.sensor_button);
-//            sensorButton.setEnabled(true);
-//
-//        }
 
 
 
@@ -162,6 +162,8 @@ public class PlantActivity extends AppCompatActivity {
                 addButton.setVisibility(View.GONE);
                 removeButton.setVisibility(View.VISIBLE);
                 water_status.setVisibility(View.VISIBLE);
+                sensorButton.setEnabled(true);
+                sensorButton.setBackgroundResource(R.drawable.sensor_button);
 
             }
         });
@@ -170,18 +172,18 @@ public class PlantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 plant_db.child("Planted").setValue("False");
-              //  plant_db.child("Sensor").setValue("False");
-
                 Toast.makeText(PlantActivity.this, "Plant removed", Toast.LENGTH_SHORT).show();
-
                 dateView.setVisibility(View.INVISIBLE);
-                wateredView.setVisibility(View.INVISIBLE);
-                removeButton.setVisibility(View.GONE);
-                addButton.setVisibility(View.VISIBLE);
+                wateredView.setVisibility(View.GONE);
                 water_status.setVisibility(View.GONE);
 
-                //sensorButton.setEnabled(true);
-                //sensorButton.setBackgroundResource(R.drawable.sensor_button);
+                removeButton.setVisibility(View.GONE);
+                addButton.setVisibility(View.VISIBLE);
+
+                plant_db.child("Sensor").setValue("False");
+                plant_db.child("Water").setValue("N/A");
+                sensorButton.setEnabled(false);
+                sensorButton.setBackgroundResource(R.drawable.sensor_button_pressed);
 
             }
         });

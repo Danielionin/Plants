@@ -31,7 +31,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     ArrayList<Plant> gridViewArray = new ArrayList<>();
     ArrayList<Plant> gridViewArrayBackup = new ArrayList<>();
     final CustomGridViewActivity adapterViewAndroid= new CustomGridViewActivity(SearchActivity.this, gridViewArray);
-    String isPlanted;
     Plant plant;
 
     private Spinner spinner;
@@ -69,15 +68,16 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         // we add "is_planted" so the plant page will know what button to display ("add" or "remove")
-                        isPlanted = dataSnapshot.child("Plants").child(plant_name).child("Planted").getValue().toString();
+                        String isPlanted = dataSnapshot.child("Plants").child(plant_name).child("Planted").getValue().toString();
+                        String sensorMode = dataSnapshot.child("Plants").child(plant_name).child("Sensor").getValue().toString();
+                        Log.d("aaaaaaaaaaaaaaa", sensorMode);
                         intent.putExtra("is_planted", isPlanted);
+                        intent.putExtra("sensor_mode", sensorMode);
                         startActivity(intent);
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
             }
         });
@@ -131,7 +131,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         });
     }
 
-
+    // called when a value from the spinner (A-Z drop down menu) is selected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
@@ -167,13 +167,10 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                 });
                 adapterViewAndroid.notifyDataSetChanged();
                 break;
-
         }
-
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent) {}
 
-    }
 }

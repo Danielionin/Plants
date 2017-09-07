@@ -61,54 +61,54 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (position % 2 == 0) {
-            holder.branch.setImageResource(R.drawable.right_leave_new);
-            holder.leftButton.setVisibility(View.INVISIBLE);
-            final String plant_name = mDataset.get(position);
-//            final String sensor_mode;
-//
-//            firebaseDB = FirebaseDatabase.getInstance().getReference("Plants").child("Sensor");
-//            firebaseDB.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    sensor_mode = dataSnapshot.child(plant_name).getValue().tos
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
 
+        final int index = position;
+        final ViewHolder viewHolder = holder;
 
-            holder.rightButton.setText(plant_name);
-            holder.rightButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(v.getContext(), PlantActivity.class);
-                    i.putExtra("plant_name", plant_name);
-                    i.putExtra("is_planted", "True");
-                   // i.putExtra("sensor_mode", sensor_mode);
-                    v.getContext().startActivity(i);
+        firebaseDB = FirebaseDatabase.getInstance().getReference("Plants");
+        firebaseDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final String plant_name = mDataset.get(index);
+                final String sensor_mode = dataSnapshot.child(plant_name).child("Sensor").getValue(String.class);
+
+                if (index % 2 == 0) {
+                    viewHolder.branch.setImageResource(R.drawable.right_leave_new);
+                    viewHolder.leftButton.setVisibility(View.INVISIBLE);
+                    viewHolder.rightButton.setText(plant_name);
+                    viewHolder.rightButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(v.getContext(), PlantActivity.class);
+                            i.putExtra("plant_name", plant_name);
+                            i.putExtra("is_planted", "True");
+                            i.putExtra("sensor_mode", sensor_mode);
+                            v.getContext().startActivity(i);
+                        }
+                    });
                 }
-            });
-        }
-        else {
-            holder.branch.setImageResource(R.drawable.left_leave_new);
-            holder.rightButton.setVisibility(View.INVISIBLE);
-            final String plant_name = mDataset.get(position);
-            holder.leftButton.setText(plant_name);
-            holder.leftButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(v.getContext(), PlantActivity.class);
-                    i.putExtra("plant_name", plant_name);
-                    i.putExtra("is_planted", "True");
-                 //   i.putExtra("sensor_mode", sensor_mode);
-                    v.getContext().startActivity(i);
+                else {
+                    viewHolder.branch.setImageResource(R.drawable.left_leave_new);
+                    viewHolder.rightButton.setVisibility(View.INVISIBLE);
+                    viewHolder.leftButton.setText(plant_name);
+                    viewHolder.leftButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(v.getContext(), PlantActivity.class);
+                            i.putExtra("plant_name", plant_name);
+                            i.putExtra("is_planted", "True");
+                            i.putExtra("sensor_mode", sensor_mode);
+                            v.getContext().startActivity(i);
+                        }
+                    });
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
